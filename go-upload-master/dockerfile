@@ -1,0 +1,7 @@
+FROM golang:1.11rc1-alpine3.8
+
+WORKDIR /usr/local/service/go-upload-master
+ADD . /usr/local/service/go-upload-master
+RUN go build .
+EXPOSE 8085
+ENTRYPOINT  ["./go-upload-master"]

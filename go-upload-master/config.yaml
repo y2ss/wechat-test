@@ -1,0 +1,59 @@
+# config.yaml
+
+# 在GO中，所有属性绑定到结构体，都是小写
+
+# HTTP模块设置
+http:
+  host: 0.0.0.0                               # 监听地址
+  port: 8033                                    # 监听端口
+
+# 上传模块的相关设置
+
+upload:
+  urlprefix: /api/
+  path: uploads                                 # 文件上传的根目录
+  # 普通文件上传
+  file:
+    - tag: app-tel
+      url: http://118.24.64.47/app-tel/
+      path: tel                                   # 文件上传的目录
+      maxsize: 104857600                          # 上传文件的最大大小
+      allowtype:                                  # 允许上传的文件后缀名
+        - .xlsx
+        - .csv
+        - .xls
+      hash: true
+    - tag: sport-gaming
+      url: http://www.y2ss.online:8233/sport_gaming/
+      path: sport_gaming
+      maxsize: 104857600
+      allowtype:
+        - "*"
+      hash: false
+    - tag: feedback
+      url: http://www.y2ss.online:8233/feedback/
+      path: feedback
+      maxsize: 104857600
+      allowtype:
+        - .png
+        - .jpg
+        - .jpeg
+      hash: true
+    - tag: avatar
+      url: http://www.y2ss.online:8233/avatar/
+      path: avatar
+      maxsize: 104857600
+      allowtype:
+        - .png
+        - .jpg
+        - .jpeg
+      hash: true
+
+  # 图片上传
+  image:
+    path: image                                 # 图片上传的目录
+    maxsize: 10485760                           # 上传图片的最大大小
+    thumbnail:
+      path: thumbnail                           # 缩略图存放的目录
+      maxwidth: 300                             # 缩略图最大宽度
+      maxheight: 300                            # 缩略图最大高度

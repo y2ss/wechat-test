@@ -1,0 +1,8 @@
+FROM node:alpine
+WORKDIR /root/
+COPY ./build .
+COPY .env .
+COPY start.sh .
+RUN npm install
+EXPOSE 3333
+CMD [ "node", "server.js" ]

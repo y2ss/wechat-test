@@ -1,0 +1,32 @@
+FROM golang:1.11rc1-alpine3.8 as builder
+
+RUN apk --no-cache add git
+
+WORKDIR $GOPATH/src/iot-server/
+
+RUN go get github.com/gin-gonic/gin
+RUN go get github.com/gorilla/websocket
+RUN go get github.com/gin-contrib/cors 
+# RUN go get github.com/influxdata/influxdb
+# RUN go get github.com/influxdata/platform
+
+RUN mkdir -p $GOPATH/src/golang.org/x/ && cd $GOPATH/src/golang.org/x/ \
+  && git clone https://github.com/golang/net.git net \
+  && go install -v net
+
+RUN cd $GOPATH/src/github.com \
+  && mkdir eclipse \
+  && cd eclipse \
+  && git clone https://github.com/eclipse/paho.mqtt.golang.git paho.mqtt.golang \
+  && cd $GOPATH/src/iot-server
+
+COPY . .    
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o iot-server .
+
+
+FROM alpine:latest as prod    
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /go/src/iot-server/iot-server .
+EXPOSE 8989
+ENTRYPOINT [ "./iot-server" ]
